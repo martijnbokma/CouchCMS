@@ -393,7 +393,23 @@
     // Current user's authentication info
     $AUTH = new KAuth( );
 
-    require_once( K_SYSTEM_THEME_DIR . 'register.php' );
+    // Check if a custom theme is defined in config.php
+    if (defined('K_ADMIN_THEME') && K_ADMIN_THEME !== '') {
+        // Path to the custom theme
+        $custom_theme_register = K_COUCH_DIR . 'theme/' . K_ADMIN_THEME . '/register.php';
+
+        // Check if the file exists in the custom theme
+        if (file_exists($custom_theme_register)) {
+            require_once($custom_theme_register);
+        } else {
+            // Fall back to the default _system theme if the file does not exist
+            require_once(K_SYSTEM_THEME_DIR . 'register.php');
+        }
+    } else {
+        // Fall back to the default _system theme if no custom theme is defined in config.php
+        require_once(K_SYSTEM_THEME_DIR . 'register.php');
+    }
+
     if( defined('K_ADMIN_THEME') ){
         $k_admin_theme = trim( K_ADMIN_THEME, " /\\" );
 
